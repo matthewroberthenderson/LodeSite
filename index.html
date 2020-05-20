@@ -120,8 +120,10 @@ loader.load("https://raw.githubusercontent.com/matthewroberthenderson/LodeSite/m
     function animate() {
         requestAnimationFrame( animate );
    
-      obj.position.y = 10;
-      obj.rotation.x = 0.5;
+        obj.position.y = 10;
+      obj.position.x = 10;
+      obj.rotation.x = 0.0;
+      obj.rotation.y = 2.9;
         renderer.setClearColor( 0x000000, 1);
         renderer.render( scene, camera );
         counter += .1;
