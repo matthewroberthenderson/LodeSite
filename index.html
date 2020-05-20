@@ -117,8 +117,8 @@
         
             var postEffect = new BABYLON.PostProcess("rgbGlitchEffect", "rgbGlitchEffect", ["time", "screenSize"], ["noiseRef0", "noiseRef1"], 1, camera);
                
-            var noiseTexture0 = new BABYLON.Texture('./textures/grass.jpg', scene);
-            var noiseTexture1 = new BABYLON.Texture('./textures/ground.jpg', scene);
+            var noiseTexture0 = new BABYLON.Texture('grass.jpg', scene);
+            var noiseTexture1 = new BABYLON.Texture('ground.jpg', scene);
         
             postEffect.onApply = function (effect) {
                 effect.setVector2("screenSize", new BABYLON.Vector2(postEffect.width, postEffect.height));
