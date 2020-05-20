@@ -1,0 +1,79 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "Object",
+		"generator": "Object3D.toJSON"
+	},
+	"geometries": [
+		{
+			"uuid": "7783B5B0-0C22-48DA-AC76-A57C5B7F8C0B",
+			"type": "BufferGeometry",
+			"data": {
+				"attributes": {
+					"position": {
+						"itemSize": 3,
+						"type": "Float32Array",
+						"array": [12.59714,2.817514,-0.5,-9.738794,0.204168,-0.5,-9.738794,0.204168,0.5,-12.59714,-2.817514,-0.5,12.59714,2.817514,-0.5,12.59714,2.817514,0.5,-9.738794,0.204168,-0.5,-12.59714,-2.817514,-0.5,-12.59714,-2.817514,0.5,-12.59714,-2.817514,0.5,12.59714,2.817514,0.5,-9.738794,0.204168,0.5,-9.738794,0.204168,-0.5,12.59714,2.817514,-0.5,-12.59714,-2.817514,-0.5,12.59714,2.817514,0.5,12.59714,2.817514,-0.5,-9.738794,0.204168,0.5,-12.59714,-2.817514,0.5,-12.59714,-2.817514,-0.5,12.59714,2.817514,0.5,-9.738794,0.204168,0.5,-9.738794,0.204168,-0.5,-12.59714,-2.817514,0.5],
+						"normalized": false
+					},
+					"normal": {
+						"itemSize": 3,
+						"type": "Float32Array",
+						"array": [-0.116209,0.993225,0,-0.116209,0.993225,0,-0.116209,0.993225,0,0.21827,-0.975888,0,0.21827,-0.975888,0,0.21827,-0.975888,0,-0.726469,0.6872,0,-0.726469,0.6872,0,-0.726469,0.6872,0,0,0,1,0,0,1,0,0,1,0,0,-1,0,0,-1,0,0,-1,-0.116209,0.993225,0,-0.116209,0.993225,0,-0.116209,0.993225,0,0.21827,-0.975888,0,0.21827,-0.975888,0,0.21827,-0.975888,0,-0.726469,0.6872,0,-0.726469,0.6872,0,-0.726469,0.6872,0],
+						"normalized": false
+					},
+					"uv": {
+						"itemSize": 2,
+						"type": "Float32Array",
+						"array": [0.428639,0,0,0,0,1,0.920719,0,0.428639,0,0.428639,1,1,0,0.920719,0,0.920719,1,0,1,0,1,0,1,0,1,0,1,0,1,0.428639,1,0.428639,0,0,1,0.920719,1,0.920719,0,0.428639,1,1,1,1,0,0.920719,1],
+						"normalized": false
+					}
+				},
+				"boundingSphere": {
+					"center": [0,0,0],
+					"radius": 12.918062
+				}
+			}
+		}],
+	"materials": [
+		{
+			"uuid": "5B8FCC92-AEA1-44B3-9100-3F29E690A3E9",
+			"type": "ShaderMaterial",
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"stencilWrite": false,
+			"stencilWriteMask": 255,
+			"stencilFunc": 519,
+			"stencilRef": 0,
+			"stencilFuncMask": 255,
+			"stencilFail": 7680,
+			"stencilZFail": 7680,
+			"stencilZPass": 7680,
+			"uniforms": {
+				"time": {
+					"value": 0
+				}
+			},
+			"vertexShader": "uniform float time;\nvarying vec3 vPosition;\nvoid main() {\n\tvPosition = position;\n\tvPosition.z += sin( time + vPosition.z * 4.0 ) / 4.0;\n\t//vPosition.y += cos( time + vPosition.z * 4.0 ) / 4.0;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4( vPosition, 1.0 );\n}",
+			"fragmentShader": "\nvarying vec3 vPosition;\nvoid main() {\n\tgl_FragColor = vec4( .8, 0.0, 0.0, 1.0 );\n}"
+		}],
+	"object": {
+		"uuid": "F5EC258A-CB24-4656-BAC1-D1417D6399A8",
+		"type": "Mesh",
+		"name": "A_1",
+		"userData": {
+			"transformData": {
+				"eulerOrder": "ZYX",
+				"translation": [-2.794718,10.754169,0],
+				"parentMatrixWorld": {
+					"elements": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]
+				}
+			}
+		},
+		"layers": 1,
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,-2.794718,10.754169,0,1],
+		"geometry": "7783B5B0-0C22-48DA-AC76-A57C5B7F8C0B",
+		"material": "5B8FCC92-AEA1-44B3-9100-3F29E690A3E9"
+	}
+}
