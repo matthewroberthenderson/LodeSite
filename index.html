@@ -1,153 +1,57 @@
-<!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Matthew Henderson</title>
-  <style>
-    html, body {
-  margin: 0;
-  padding:0;
-  height:100%;
-  background: rgba(0, 0, 0, .8);
-}
+<html>
+	<head>
+		<script src="https://aframe.io/releases/0.2.0/aframe.min.js"></script>
+		
+	</head>
+	<body>
+		
+<a-scene>
+  <a-assets>
+    <img id="box" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/233187/crate-texture.jpg" crossorigin="anonymous">
+    <img id="walls" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/233187/brick-texture.jpg" crossorigin="anonymous">
+    <img id="ceiling" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/233187/wood-texture.jpg" crossorigin="anonymous">
+    <img id="floor" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/233187/tile-texture.jpg" crossorigin="true">
+  </a-assets>
 
-canvas {width:100%; height:100%;}
-
-#cover {
-    background: rgba(0, 0, 0, .8);
-    width: 100%;
-    height: 100%;
-    left: 0;
-    position:absolute;
-  display: table;
-}
-
-h1 {padding-top:30%;color:rgba(0, 0, 0, .3); text-align:center;  font-family: 'Wire One', sans-serif; letter-spacing:30px ; font-size:42px; width:100%
-}
-h2 {clear:both; padding-top:20px; width:100%; display:block;colorr:rgba(0, 0, 0, .2); text-align:center;  font-family: 'UnifrakturMaguntia', cursive;letter-spacing:20px ;font-size:22px}
-
-html, html a {
-    -webkit-font-smoothing: antialiased;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
-}
-  </style>
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<link href="https://fonts.googleapis.com/css?family=Wire+One" rel="stylesheet"> 
-<link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">
-
-<div id="cover">
+  <a-box color="#FFF" width="1.5" height="1.5" depth="1.5"
+         position="-0.75 0.5 0" rotation="0 45 0" 
+         src="#box">
+  </a-box>
+  <a-box color="#FFF" width="1.5" height="1.5" depth="1.5"
+         position="1.4 0.5 0" rotation="0 -45 0" 
+         src="#box">
+  </a-box>
+  <!-- Top Box -->
+  <a-box color="#FFF" width="1.5" height="1.5" depth="1.5"
+         position="0.05 2.02 -0.1" rotation="0 25 0" 
+         src="#box">
+  </a-box>
   
-</div>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/chromaticDG.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/AnaglyphEffect.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/MainEffect.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/ShaderPass.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/GlitchBuffering.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/MainRenderPass.js'></script>
-<script src='https://matthewroberthenderson.github.io/LodeSite/CopyShader.js'>
-  </script>
+  <!-- Walls -->
+  <a-box color="#FFF" width="20" height="20"
+         position="-10 0 0" rotation="0 90 0" 
+         src="#walls">
+  </a-box>
+  <a-box color="#FFF" width="20" height="20" position="0 0 -10" src="#walls">
+  </a-box>
+  <a-box color="#FFF" width="20" height="20" position="10 0 0" rotation="0 90 0" src="#walls">
+  </a-box>
+  <a-box color="#FFF" width="20" height="20" position="0 0 10" src="#walls">
+  </a-box>
+  <!-- Ceiling -->
+  <a-box color="#FFF" width="20" height="20" position="0 10 0" rotation="90 0 0" src="#ceiling"></a-box>
+
+  <!-- New lights. -->
+  <a-light type="spot" color="#fff" position="5 5 3" look-at="a-box" intensity="1.5"> </a-light>
+  <a-light type="point" color="#AAA" position="-5 5 7" intensity="0.375"></a-light>
   
+  <!-- Sky / Background -->
+  <a-sky color="#000"></a-sky>
   
-  
-  <script>
-    
-    var renderer = new THREE.WebGLRenderer();
-renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.gammaInput = true;
-renderer.gammaOutput = true;
-document.body.appendChild(renderer.domElement);
+  <!-- Floor -->
+  <a-plane rotation="-90 0 0" position="2 -1 -2" color="#aaa" width="60" height="50" depth="2" src="#floor"></a-plane>
 
-var spotLight;
-var counter = 0;
-var scene = new THREE.Scene();
-var width = window.innerWidth || 2;
-var height = window.innerHeight || 2;
-var camera = new THREE.PerspectiveCamera( 35, // field of view
-window.innerWidth/window.innerHeight,  // aspect ratio
-            0.1, // near plane
-            1000 // far plane
-        );
-
-camera.position.set( 0, 5, -25 );
-camera.lookAt( scene.position );
-
-function addLights() {
- 
-      var bluePoint = new THREE.PointLight(0x0033ff, 7, 550);
-    bluePoint.position.set( 270, 5, 70 );
-    scene.add(bluePoint);
-    scene.add(new THREE.PointLightHelper(bluePoint, 6));
-
-    var greenPoint = new THREE.PointLight(0x7F0000, 1, 150);
-    greenPoint.position.set( -20, 55, 70 );
-    scene.add(greenPoint);
-
-      scene.add(new THREE.PointLightHelper(greenPoint, 6));
-      var hemLight = new THREE.HemisphereLight(0xffe5bb, 0xFFBF00, .1);
-    scene.add(hemLight);
-
-      spotLight = new THREE.SpotLight(0x000000, 1, 200, 20, 10);
-}
-  
- 
-    addLights();
-
-
-        effect = new THREE.AnaglyphEffect( renderer );
-				effect.setSize( width, height );
-        
-      var composer = new THREE.EffectComposer( renderer );				
-        glitchPass = new THREE.GlitchPass(35, 195, 48, 120, 200, 200 );
-        glitchPass.renderToScreen = true;
-        glitchPass.goWild = false;
-
-				composer.addPass( glitchPass );   
-        composer.addPass( new THREE.RenderPass( scene, camera ) );
-        //effect.render( scene, camera );
-
-var loader = new THREE.ObjectLoader();
-
-loader.load("https://raw.githubusercontent.com/matthewroberthenderson/LodeSite/master/LodeLogo.json",function ( obj ) {
-     scene.add( obj );
-  
-
-    function animate() {
-        requestAnimationFrame( animate );
-   
-        obj.position.y = 10;
-      obj.position.x = 10;
-      obj.rotation.x = 0.0;
-      obj.rotation.y = 2.9;
-        renderer.setClearColor( 0x000000, 1);
-        renderer.render( scene, camera );
-        counter += .1;
-        spotLight.target.position.x = Math.sin(counter) * 200;
-        // this renders the shader / processing effects
-        composer.render();
-        }
-  
-animate();
-
-});
-
-function handleWindowResize() {
-
-	HEIGHT = window.innerHeight;
-	WIDTH = window.innerWidth;
-	renderer.setSize(WIDTH, HEIGHT);
-	camera.aspect = WIDTH / HEIGHT;
-	camera.updateProjectionMatrix();
-}
-
-window.addEventListener('resize', handleWindowResize, false);
-  
-  </script>
-
-</body>
+</a-scene>
+	</body>
+	
 </html>
