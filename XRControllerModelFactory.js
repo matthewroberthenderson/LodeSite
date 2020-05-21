@@ -11,7 +11,7 @@ import {
 	SphereGeometry,
 } from "https://matthewroberthenderson.github.io/LodeSite/three.module.js";
 
-import { GLTFLoader } from 'https://matthewroberthenderson.github.io/LodeSite/GLTFLoader.js';
+import GLTFLoader from 'https://matthewroberthenderson.github.io/LodeSite/GLTFLoader.js';
 
 import {
 	Constants as MotionControllerConstants,
