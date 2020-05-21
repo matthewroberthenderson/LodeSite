@@ -1,157 +1,153 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
-        <title>Babylon.js sample code</title>
-
-        <!-- Babylon.js -->
-        <script src="https://code.jquery.com/pep/0.4.2/pep.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
-        <script src="https://preview.babylonjs.com/ammo.js"></script>
-        <script src="https://preview.babylonjs.com/cannon.js"></script>
-        <script src="https://preview.babylonjs.com/Oimo.js"></script>
-        <script src="https://preview.babylonjs.com/libktx.js"></script>
-        <script src="https://preview.babylonjs.com/earcut.min.js"></script>
-        <script src="https://preview.babylonjs.com/babylon.js"></script>
-        <script src="https://preview.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
-        <script src="https://preview.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
-        <script src="https://preview.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
-        <script src="https://preview.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
-        <script src="https://preview.babylonjs.com/loaders/babylonjs.loaders.js"></script>
-        <script src="https://preview.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
-        <script src="https://preview.babylonjs.com/gui/babylon.gui.min.js"></script>
-
-        <style>
-            html, body {
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-            }
-
-            #renderCanvas {
-                width: 100%;
-                height: 100%;
-                touch-action: none;
-            }
-        </style>
-    </head>
-<body>
-    <canvas id="renderCanvas"></canvas>
-    <script>
-        var canvas = document.getElementById("renderCanvas");
-
-        var engine = null;
-        var scene = null;
-        var sceneToRender = null;
-        var createDefaultEngine = function() { return new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true }); };
-        https://www.shadertoy.com/view/4t23Rc
-        
-        var rgbGlitchFX = 
-        `varying vec2 vUV;
-        uniform sampler2D textureSampler;
-        uniform vec2 screenSize;
-        
-        uniform sampler2D noiseRef0;
-        uniform sampler2D noiseRef1;
-        
-        uniform float time; 
-        
-        #define AMPLITUDE 0.05
-        #define SPEED 10.0
-        
-        vec4 rgbShift( in vec2 p , in vec4 shift) {
-            shift *= 1.05*shift.w - 1.0;
-            vec2 rs = vec2(shift.x,-shift.y);
-            vec2 gs = vec2(shift.y,-shift.z);
-            vec2 bs = vec2(shift.z,-shift.x);    
-            float r = texture2D(textureSampler, p+rs, 0.0).x;
-            float g = texture2D(textureSampler, p+gs, 0.0).y;
-            float b = texture2D(textureSampler, p+bs, 0.0).z;
-            return vec4(r,g,b,1.0);
-        }
-        vec4 noise( in vec2 p ) {
-            return texture2D(noiseRef0, p, 0.0);
-        }
-        
-        vec4 vec4pow( in vec4 v, in float p ) {
-            return vec4(pow(v.x,p),pow(v.y,p),pow(v.z,p),v.w); 
-        }
-        void main(void){ 
-            vec2 p = vUV;
-            vec4 c = vec4(0.0,0.0,0.0,1.0);
-            vec4 shift = vec4pow(noise(vec2(SPEED*time,2.0*SPEED*time/25.0 )),8.0)
-                		*vec4(AMPLITUDE,AMPLITUDE,AMPLITUDE,1.0);
-            c += rgbShift(p, shift);
-           gl_FragColor = c;
-        }
-        `;
-        
-         BABYLON.Effect.ShadersStore['rgbGlitchEffectFragmentShader'] = rgbGlitchFX;
-        
-        var createScene = function () {
-            var scene = new BABYLON.Scene(engine);
-        
-            //Adding a light
-            var light = new BABYLON.PointLight("Omni", new BABYLON.Vector3(0, 0, 0), scene);
-        
-            //Adding an Arc Rotate Camera
-             var camera = new BABYLON.WebVRFreeCamera("camera1", new BABYLON.Vector3(0, 0, 0), scene, false, { trackPosition: true });
-            camera.deviceScaleFactor = 1;
-        
-            // The first parameter can be used to specify which mesh to import. Here we import all meshes
-            BABYLON.SceneLoader.ImportMesh("", "https://matthewroberthenderson.github.io/LodeSite/", "finalScene.babylon", scene, function (newMeshes) {
-                // Set the target of the camera to the first imported mesh
-                camera.target = newMeshes[0];
-            });
-        
-            var time = 0;
-            var rate = 0.01;
-            // Move the light with the camera
-            scene.registerBeforeRender(function () {
-                light.position = camera.position;
-                 time+=scene.getAnimationRatio()*rate;
-            });
-        
-            var postEffect = new BABYLON.PostProcess("rgbGlitchEffect", "rgbGlitchEffect", ["time", "screenSize"], ["noiseRef0", "noiseRef1"], 1, camera);
-               
-            var noiseTexture0 = new BABYLON.Texture('https://matthewroberthenderson.github.io/LodeSite/grass.jpg', scene);
-            var noiseTexture1 = new BABYLON.Texture('https://matthewroberthenderson.github.io/LodeSite/ground.jpg', scene);
-        
-            postEffect.onApply = function (effect) {
-                effect.setVector2("screenSize", new BABYLON.Vector2(postEffect.width, postEffect.height));
-                effect.setFloat('time', time); //this is the problematic line
-                effect.setTexture('noiseRef0', noiseTexture0);
-                effect.setTexture('noiseRef1', noiseTexture1);
-            };   
-        
-        
-            return scene;
-        }
-var engine;
-try {
-    engine = createDefaultEngine();
-} catch(e) {
-    console.log("the available createEngine function failed. Creating the default engine instead");
-    engine = createDefaultEngine();
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Matthew Henderson</title>
+  <style>
+    html, body {
+  margin: 0;
+  padding:0;
+  height:100%;
+  background: rgba(0, 0, 0, .8);
 }
-        if (!engine) throw 'engine should not be null.';
-        scene = createScene();;
-        sceneToRender = scene
 
-        engine.runRenderLoop(function () {
-            if (sceneToRender) {
-                sceneToRender.render();
-            }
-        });
+canvas {width:100%; height:100%;}
 
-        // Resize
-        window.addEventListener("resize", function () {
-            engine.resize();
-        });
-    </script>
+#cover {
+    background: rgba(0, 0, 0, .8);
+    width: 100%;
+    height: 100%;
+    left: 0;
+    position:absolute;
+  display: table;
+}
+
+h1 {padding-top:30%;color:rgba(0, 0, 0, .3); text-align:center;  font-family: 'Wire One', sans-serif; letter-spacing:30px ; font-size:42px; width:100%
+}
+h2 {clear:both; padding-top:20px; width:100%; display:block;colorr:rgba(0, 0, 0, .2); text-align:center;  font-family: 'UnifrakturMaguntia', cursive;letter-spacing:20px ;font-size:22px}
+
+html, html a {
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+  </style>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<link href="https://fonts.googleapis.com/css?family=Wire+One" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css?family=UnifrakturMaguntia" rel="stylesheet">
+
+<div id="cover">
+  
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/86/three.min.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/chromaticDG.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/AnaglyphEffect.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/MainEffect.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/ShaderPass.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/GlitchBuffering.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/MainRenderPass.js'></script>
+<script src='https://matthewroberthenderson.github.io/LodeSite/CopyShader.js'>
+  </script>
+  
+  
+  
+  <script>
+    
+    var renderer = new THREE.WebGLRenderer();
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.gammaInput = true;
+renderer.gammaOutput = true;
+document.body.appendChild(renderer.domElement);
+
+var spotLight;
+var counter = 0;
+var scene = new THREE.Scene();
+var width = window.innerWidth || 2;
+var height = window.innerHeight || 2;
+var camera = new THREE.PerspectiveCamera( 35, // field of view
+window.innerWidth/window.innerHeight,  // aspect ratio
+            0.1, // near plane
+            1000 // far plane
+        );
+
+camera.position.set( 0, 5, -25 );
+camera.lookAt( scene.position );
+
+function addLights() {
+ 
+      var bluePoint = new THREE.PointLight(0x0033ff, 7, 550);
+    bluePoint.position.set( 270, 5, 70 );
+    scene.add(bluePoint);
+    scene.add(new THREE.PointLightHelper(bluePoint, 6));
+
+    var greenPoint = new THREE.PointLight(0x7F0000, 1, 150);
+    greenPoint.position.set( -20, 55, 70 );
+    scene.add(greenPoint);
+
+      scene.add(new THREE.PointLightHelper(greenPoint, 6));
+      var hemLight = new THREE.HemisphereLight(0xffe5bb, 0xFFBF00, .1);
+    scene.add(hemLight);
+
+      spotLight = new THREE.SpotLight(0x000000, 1, 200, 20, 10);
+}
+  
+ 
+    addLights();
+
+
+        effect = new THREE.AnaglyphEffect( renderer );
+				effect.setSize( width, height );
+        
+      var composer = new THREE.EffectComposer( renderer );				
+        glitchPass = new THREE.GlitchPass(35, 195, 48, 120, 200, 200 );
+        glitchPass.renderToScreen = true;
+        glitchPass.goWild = false;
+
+				composer.addPass( glitchPass );   
+        composer.addPass( new THREE.RenderPass( scene, camera ) );
+        //effect.render( scene, camera );
+
+var loader = new THREE.ObjectLoader();
+
+loader.load("https://raw.githubusercontent.com/matthewroberthenderson/LodeSite/master/LodeLogo.json",function ( obj ) {
+     scene.add( obj );
+  
+
+    function animate() {
+        requestAnimationFrame( animate );
+   
+        obj.position.y = 10;
+      obj.position.x = 10;
+      obj.rotation.x = 0.0;
+      obj.rotation.y = 2.9;
+        renderer.setClearColor( 0x000000, 1);
+        renderer.render( scene, camera );
+        counter += .1;
+        spotLight.target.position.x = Math.sin(counter) * 200;
+        // this renders the shader / processing effects
+        composer.render();
+        }
+  
+animate();
+
+});
+
+function handleWindowResize() {
+
+	HEIGHT = window.innerHeight;
+	WIDTH = window.innerWidth;
+	renderer.setSize(WIDTH, HEIGHT);
+	camera.aspect = WIDTH / HEIGHT;
+	camera.updateProjectionMatrix();
+}
+
+window.addEventListener('resize', handleWindowResize, false);
+  
+  </script>
+
 </body>
 </html>
-
