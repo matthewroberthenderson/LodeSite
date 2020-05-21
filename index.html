@@ -1,20 +1,50 @@
-<html>
-  <head>
-    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-extras.animation-mixer@3.13.1/dist/aframe-extras.animation-mixer.min.js"></script>
-    
-  </head>
-  <body>
-    <a-scene>
-    <a-assets>
-      <a-asset-item src="https://matthewroberthenderson.github.io/LodeSite/SimpleGLTF.gltf"  id="drone"></a-asset-item>
-    </a-assets>  
-       
-      <a-entity gltf-model="#drone" scale="0.01 0.01 0.01"  position="0 0 -4" shadow="receive: true" rotation="0 0 0" samsung-logo>
-</a-entity>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: sans-serif;
+				font-size: 11px;
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body ontouchstart="">
+		<script src="./js/HelioWebXRPolyfill.js"></script>
 
+		<script type="module">
 
+			import * as THREE from './js/three.module.js';
+			import { APP } from './js/app.js';
+			import { VRButton } from './js/VRButton.js';
 
-    </a-scene>
-  </body>
+			window.THREE = THREE; // Used by APP Scripts.
+			window.VRButton = VRButton; // Used by APP Scripts.
+
+			var loader = new THREE.FileLoader();
+			loader.load( 'app.json', function ( text ) {
+
+				var player = new APP.Player();
+				player.load( JSON.parse( text ) );
+				player.setSize( window.innerWidth, window.innerHeight );
+				player.play();
+
+				document.body.appendChild( player.dom );
+
+				window.addEventListener( 'resize', function () {
+
+					player.setSize( window.innerWidth, window.innerHeight );
+
+				} );
+
+			} );
+
+		</script>
+	</body>
 </html>
