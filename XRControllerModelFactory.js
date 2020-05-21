@@ -9,7 +9,7 @@ import {
 	Object3D,
 	Quaternion,
 	SphereGeometry,
-} from "../../../build/three.module.js";
+} from "https://matthewroberthenderson.github.io/LodeSite/three.module.js";
 
 import { GLTFLoader } from '../loaders/GLTFLoader.js';
 
