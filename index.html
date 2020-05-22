@@ -44,6 +44,11 @@
 				} );
 
 			} );
+			
+			var mat = new THREE.MeshBasicMaterial({color:0xff0000});
+			var mesh = new THREE.BoxGeomerty(1,1,1);
+			var cube = new THREE.mesh(mesh,mat);
+			scene.add(cube);
 
 		</script>
 	</body>
